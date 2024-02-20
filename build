@@ -17,9 +17,9 @@ go test ./...
 go build -ldflags "-s -w" -o $BIN
 
 # For cross compiling
-# GOOS=linux go build -ldflags "-s -w" -o ${Prg}
-# GOOS=windows go build -ldflags "-s -w" -o ${Prg}.exe
-# GOOS=darwin go build -ldflags "-s -w" -o ${Prg}
+# GOOS=linux GOARCH=amd64|arm64   go build -ldflags "-s -w" -o ${Prg}
+# GOOS=windows GOARCH=amd64|arm64 go build -ldflags "-s -w" -o ${Prg}.exe
+# GOOS=darwin GOARCH=arm64        go build -ldflags "-s -w" -o ${Prg}
 
 printf "\n"
 ls -l $GOPATH/bin/$Prg | grep $Prg
