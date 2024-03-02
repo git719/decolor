@@ -13,14 +13,16 @@ import (
 
 const (
 	prgname = "decolor"
-	prgver  = "1.0.0"
+	prgver  = "1.0.1"
 )
 
 func printUsage() {
-	fmt.Printf(prgname + " text decolorizer v" + prgver + "\n" +
-		"                   Decolorized text that is piped into the program\n" +
-		"    FILENAME       Decolorize given file\n" +
-		"    -v             Print this usage page\n")
+	fmt.Printf(prgname + " v" + prgver + "\n" +
+		"Text decolorizer\n" +
+		"Usage: " + prgname + " [options]\n" +
+		"  |piped input|      Piped text is decolorized\n" +
+		"  FILENAME           Decolorize given file\n" +
+		"  -?, -h, --help     Print this usage page\n")
 	os.Exit(0)
 }
 
@@ -59,9 +61,15 @@ func loadAndDecolorize(filename string) {
 }
 
 func main() {
-	if hasPipedInput() {
+	if len(os.Args) == 2 {
+		switch os.Args[1] {
+		case "-?", "-h", "--help":
+			printUsage()
+		default:
+			loadAndDecolorize(os.Args[1])
+		}
+	} else if hasPipedInput() {
 		// Process piped input
-		// Read piped input
 		rawBytes, err := io.ReadAll(os.Stdin)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error reading from stdin:", err)
@@ -71,16 +79,6 @@ func main() {
 		decolorizedText := color.ClearCode(string(rawBytes))
 		fmt.Printf(decolorizedText)
 	} else {
-		// Process argument input
-		if len(os.Args) == 2 {
-			switch os.Args[1] {
-			case "-v":
-				printUsage()
-			default:
-				loadAndDecolorize(os.Args[1])
-			}
-		} else {
-			printUsage()
-		}
+		printUsage()
 	}
 }
